@@ -1,0 +1,122 @@
+#include <stdio.h>
+#include <string.h>
+
+// Estrutura de dados para as cartas
+struct Carta {
+    char pais[50];
+    int populacao;
+    float area;
+    float pib;
+    int pontosTuristicos;
+    float densidadeDemografica;
+};
+
+// Função para mostrar o menu de atributos
+void mostrarMenu(int atributoBloqueado) {
+    printf("Escolha o atributo para comparacao:\n");
+    if (atributoBloqueado != 1) printf("1 - Populacao\n");
+    if (atributoBloqueado != 2) printf("2 - Area\n");
+    if (atributoBloqueado != 3) printf("3 - PIB\n");
+    if (atributoBloqueado != 4) printf("4 - Pontos Turisticos\n");
+    if (atributoBloqueado != 5) printf("5 - Densidade Demografica\n");
+    printf("Opcao: ");
+}
+
+int main() {
+    struct Carta carta1, carta2;
+    int escolha1 = 0, escolha2 = 0;
+    float valor1_carta1, valor1_carta2;
+    float valor2_carta1, valor2_carta2;
+    float somaCarta1, somaCarta2;
+
+    // --- Cadastro das cartas ---
+    strcpy(carta1.pais, "Brasil");
+    carta1.populacao = 214000000;
+    carta1.area = 8516000.0;
+    carta1.pib = 2490000000000.0;
+    carta1.pontosTuristicos = 25;
+    carta1.densidadeDemografica = carta1.populacao / carta1.area;
+
+    strcpy(carta2.pais, "Japao");
+    carta2.populacao = 125000000;
+    carta2.area = 377975.0;
+    carta2.pib = 4930000000000.0;
+    carta2.pontosTuristicos = 30;
+    carta2.densidadeDemografica = carta2.populacao / carta2.area;
+
+    printf("===== SUPER TRUNFO - NIVEL MESTRE =====\n\n");
+    printf("Cartas em jogo:\n");
+    printf("1 - %s\n", carta1.pais);
+    printf("2 - %s\n\n", carta2.pais);
+
+    // --- Escolha do primeiro atributo ---
+    mostrarMenu(0);
+    scanf("%d", &escolha1);
+
+    // Validação do primeiro atributo
+    if (escolha1 < 1 || escolha1 > 5) {
+        printf("\nOpcao invalida! Encerrando o programa.\n");
+        return 0;
+    }
+
+    // --- Escolha do segundo atributo (dinâmico, sem repetir) ---
+    printf("\nAgora escolha o segundo atributo (diferente do primeiro):\n");
+    mostrarMenu(escolha1);
+    scanf("%d", &escolha2);
+
+    if (escolha2 < 1 || escolha2 > 5 || escolha2 == escolha1) {
+        printf("\nOpcao invalida! Os atributos devem ser diferentes.\n");
+        return 0;
+    }
+
+    // --- Obtenção dos valores dos dois atributos ---
+    // Primeiro atributo
+    switch (escolha1) {
+        case 1: valor1_carta1 = carta1.populacao; valor1_carta2 = carta2.populacao; break;
+        case 2: valor1_carta1 = carta1.area; valor1_carta2 = carta2.area; break;
+        case 3: valor1_carta1 = carta1.pib; valor1_carta2 = carta2.pib; break;
+        case 4: valor1_carta1 = carta1.pontosTuristicos; valor1_carta2 = carta2.pontosTuristicos; break;
+        case 5: valor1_carta1 = carta1.densidadeDemografica; valor1_carta2 = carta2.densidadeDemografica; break;
+        default: valor1_carta1 = valor1_carta2 = 0; break;
+    }
+
+    // Segundo atributo
+    switch (escolha2) {
+        case 1: valor2_carta1 = carta1.populacao; valor2_carta2 = carta2.populacao; break;
+        case 2: valor2_carta1 = carta1.area; valor2_carta2 = carta2.area; break;
+        case 3: valor2_carta1 = carta1.pib; valor2_carta2 = carta2.pib; break;
+        case 4: valor2_carta1 = carta1.pontosTuristicos; valor2_carta2 = carta2.pontosTuristicos; break;
+        case 5: valor2_carta1 = carta1.densidadeDemografica; valor2_carta2 = carta2.densidadeDemografica; break;
+        default: valor2_carta1 = valor2_carta2 = 0; break;
+    }
+
+    // --- Cálculo da soma (considerando a regra especial da densidade demográfica) ---
+    valor1_carta1 = (escolha1 == 5) ? (1 / valor1_carta1) : valor1_carta1;
+    valor1_carta2 = (escolha1 == 5) ? (1 / valor1_carta2) : valor1_carta2;
+    valor2_carta1 = (escolha2 == 5) ? (1 / valor2_carta1) : valor2_carta1;
+    valor2_carta2 = (escolha2 == 5) ? (1 / valor2_carta2) : valor2_carta2;
+
+    somaCarta1 = valor1_carta1 + valor2_carta1;
+    somaCarta2 = valor1_carta2 + valor2_carta2;
+
+    // --- Exibição dos resultados detalhados ---
+    printf("\n===== RESULTADO FINAL =====\n");
+    printf("%s vs %s\n\n", carta1.pais, carta2.pais);
+
+    printf("Atributo 1 (%d): %.2f x %.2f\n", escolha1, valor1_carta1, valor1_carta2);
+    printf("Atributo 2 (%d): %.2f x %.2f\n", escolha2, valor2_carta1, valor2_carta2);
+    printf("\nSoma dos atributos:\n");
+    printf("%s: %.2f\n", carta1.pais, somaCarta1);
+    printf("%s: %.2f\n\n", carta2.pais, somaCarta2);
+
+    // --- Determinação do vencedor ---
+    if (somaCarta1 > somaCarta2) {
+        printf("🏆 Vencedor: %s!\n", carta1.pais);
+    } else if (somaCarta2 > somaCarta1) {
+        printf("🏆 Vencedor: %s!\n", carta2.pais);
+    } else {
+        printf("🤝 Empate!\n");
+    }
+
+    return 0;
+}
